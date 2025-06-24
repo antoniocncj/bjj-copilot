@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJJ Evolution Tracker</title>
+    <style>
+        /* ======== VARIÁVEIS E RESET ======== */
+        :root {
+            --color-white: #ffffff;
+            --color-black: #121212;
+            --color-blue: #1a57a3;
+            --color-blue-dark: #123c70;
+            --color-gray: #f4f4f4;
+            --color-gray-dark: #888888;
+            --color-purple: #4a2c82;
+            --color-brown: #7c4c2c;
+            
+            --belt-white: #f9f9f9;
+            --belt-blue: #1a57a3;
+            --belt-purple: #4a2c82;
+            --belt-brown: #7c4c2c;
+            --belt-black: #121212;
+            
+            --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--color-black);
+            background: var(--color-gray);
+        }
+
+        /* ======== LAYOUTS E CONTAINERS ======== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            margin: 2rem 0;
+            background: var(--color-white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            border-bottom: 2px solid var(--color-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--color-blue);
+        }
+
+        /* ======== HEADER ======== */
+        header {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-blue);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--color-blue);
+        }
+
+        /* ======== PERFIL DO ALUNO ======== */
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--color-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-image i {
+            font-size: 3rem;
+            color: var(--color-gray-dark);
+        }
+
+        .profile-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .belt {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--color-white);
+        }
+
+        .belt-white {
+            background: var(--belt-white);
+            color: var(--color-black);
+            border: 1px solid #ddd;
+        }
+
+        .belt-blue {
+            background: var(--belt-blue);
+        }
+
+        .belt-purple {
+            background: var(--belt-purple);
+        }
+
+        .belt-brown {
+            background: var(--belt-brown);
+        }
+
+        .belt-black {
+            background: var(--belt-black);
+        }
+
+        .degree {
+            display: inline-block;
+            font-size: 0.8rem;
+            margin-left: 0.25rem;
+        }
+
+        /* ======== EVOLUÇÃO NOS GOLPES ======== */
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .technique-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-blue-dark);
+            border-bottom: 1px solid var(--color-gray-dark);
+            padding-bottom: 0.25rem;
+        }
+
+        .technique-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .technique-item:hover {
+            background: var(--color-gray);
+        }
+
+        .technique-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--color-blue);
+            border-radius: 4px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .technique-checkbox:checked {
+            background: var(--color-blue);
+        }
+
+        .technique-checkbox:checked::after {
+            content: "✓";
+            color: white;
+            position: absolute;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .technique-label {
+            flex-grow: 1;
+        }
+
+        .technique-level {
+            display: flex;
+            gap: 2px;
+        }
+
+        .level-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-gray-dark);
+        }
+
+        .level-dot.filled {
+            background: var(--color-blue);
+        }
+
+        /* ======== HISTÓRICO DE FAIXAS E GRAUS ======== */
+        .timeline {
+            position: relative;
+            padding-left: 25px;
+            margin-left: 10px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 2px;
+            background: var(--color-blue);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -31px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-blue);
+            border: 2px solid var(--color-white);
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--color-gray-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-details {
+            font-size: 0.9rem;
+        }
+
+        /* ======== FOOTER ======== */
+        footer {
+            background: var(--color-blue-dark);
+            color: var(--color-white);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-info h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* ======== RESPONSIVIDADE ======== */
+        @media (max-width: 768px) {
+            .techniques-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-contact {
+                align-items: center;
+            }
+        }
+
+        /* ======== ANIMAÇÕES ======== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .section:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .section:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+    </style>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header - Logo e Nome do Aluno -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-fist-raised logo-icon"></i>
+                <h1>BJJ Evolution</h1>
+            </div>
+            <div class="student-name">
+                <strong>Olá, <span id="student-name">Carlos Silva</span></strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Seção de Perfil do Aluno -->
+        <section class="section" id="profile-section">
+            <div class="section-title">
+                <i class="fas fa-user"></i>
+                <h2>Perfil do Aluno</h2>
+            </div>
+            <div class="profile">
+                <div class="profile-image">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h2 id="profile-name">Carlos Silva</h2>
+                    <div>
+                        <span class="belt belt-blue">Faixa Azul</span>
+                        <span class="degree">3º Grau</span>
+                    </div>
+                    <p>Treinando desde: <strong>Janeiro 2022</strong></p>
+                    <p>Academia: <strong>Team Jiu-Jitsu</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Evolução nos Golpes -->
+        <section class="section" id="techniques-section">
+            <div class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>Evolução nos Golpes</h2>
+            </div>
+            
+            <div class="techniques-grid">
+                <!-- Golpes em Pé -->
+                <div class="technique-category">
+                    <h3 class="category-title">Golpes em Pé</h3>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-1" class="technique-checkbox">
+                        <label for="tech-1" class="technique-label">Single Leg Takedown</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-2" class="technique-checkbox">
+                        <label for="tech-2" class="technique-label">Double Leg Takedown</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-3" class="technique-checkbox" checked>
+                        <label for="tech-3" class="technique-label">Queda de Osoto Gari</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posições de Guarda -->
+                <div class="technique-category">
+                    <h3 class="category-title">Posições de Guarda</h3>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-4" class="technique-checkbox" checked>
+                        <label for="tech-4" class="technique-label">Guarda Fechada</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-5" class="technique-checkbox" checked>
+                        <label for="tech-5" class="technique-label">Guarda Aberta</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-6" class="technique-checkbox">
+                        <label for="tech-6" class="technique-label">Guarda De La Riva</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finalizações -->
+                <div class="technique-category">
+                    <h3 class="category-title">Finalizações</h3>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-7" class="technique-checkbox" checked>
+                        <label for="tech-7" class="technique-label">Armlock</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-8" class="technique-checkbox" checked>
+                        <label for="tech-8" class="technique-label">Triangle Choke</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-9" class="technique-checkbox">
+                        <label for="tech-9" class="technique-label">Kimura</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passagens de Guarda -->
+                <div class="technique-category">
+                    <h3 class="category-title">Passagens de Guarda</h3>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-10" class="technique-checkbox" checked>
+                        <label for="tech-10" class="technique-label">Passagem de Joelho</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-11" class="technique-checkbox">
+                        <label for="tech-11" class="technique-label">Passagem Toreando</label>
+                        <div class="technique-level">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                    <div class="technique-item">
+                        <input type="checkbox" id="tech-12" class="technique-checkbox">
+                        <label for="tech-12" class="technique-label">Stack Pass</label>
+                        <div class="technique-level">
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Histórico de Faixas e Graus -->
+        <section class="section" id="history-section">
+            <div class="section-title">
+                <i class="fas fa-history"></i>
+                <h2>Histórico de Faixas e Graus</h2>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">05 Mar 2024</div>
+                    <h3 class="timeline-title">Faixa Azul - 3º Grau</h3>
+                    <p class="timeline-details">Conquistado após desempenho em campeonato estadual</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">10 Nov 2023</div>
+                    <h3 class="timeline-title">Faixa Azul - 2º Grau</h3>
+                    <p class="timeline-details">Avaliação técnica semestral</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">07 Jun 2023</div>
+                    <h3 class="timeline-title">Faixa Azul - 1º Grau</h3>
+                    <p class="timeline-details">Participação em seminário com mestre internacional</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">15 Jan 2023</div>
+                    <h3 class="timeline-title">Faixa Azul</h3>
+                    <p class="timeline-details">Promoção anual da academia</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">05 Jan 2022</div>
+                    <h3 class="timeline-title">Faixa Branca</h3>
+                    <p class="timeline-details">Início da jornada no Jiu-Jitsu</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer - Informações da Academia -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Team Jiu-Jitsu</h3>
+                    <p>Uma academia comprometida com o desenvolvimento técnico e pessoal de cada aluno.</p>
+                </div>
+                <div class="footer-info">
+                    <h3>Contato</h3>
+                    <div class="footer-contact">
+                        <span><i class="fas fa-map-marker-alt"></i> Rua dos Atletas, 123</span>
+                        <span><i class="fas fa-phone"></i> (11) 9876-5432</span>
+                        <span><i class="fas fa-envelope"></i> contato@teamjiujitsu.com</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BJJ Evolution. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ======== Dados do Aluno ========
+        // Os dados abaixo poderão ser substituídos pela integração com uma API ou banco de dados no futuro
+        const studentData = {
+            name: "Carlos Silva",
+            belt: "blue", // white, blue, purple, brown, black
+            degree: 3, // 0-4
+            startDate: "Janeiro 2022",
+            academy: "Team Jiu-Jitsu",
+            techniques: [
+                { id: "tech-1", name: "Single Leg Takedown", category: "stand", level: 2, mastered: false },
+                { id: "tech-2", name: "Double Leg Takedown", category: "stand", level: 1, mastered: false },
+                { id: "tech-3", name: "Queda de Osoto Gari", category: "stand", level: 3, mastered: true },
+                { id: "tech-4", name: "Guarda Fechada", category: "guard", level: 3, mastered: true },
+                { id: "tech-5", name: "Guarda Aberta", category: "guard", level: 2, mastered: true },
+                { id: "tech-6", name: "Guarda De La Riva", category: "guard", level: 1, mastered: false },
+                { id: "tech-7", name: "Armlock", category: "submission", level: 2, mastered: true },
+                { id: "tech-8", name: "Triangle Choke", category: "submission", level: 2, mastered: true },
+                { id: "tech-9", name: "Kimura", category: "submission", level: 1, mastered: false },
+                { id: "tech-10", name: "Passagem de Joelho", category: "pass", level: 2, mastered: true },
+                { id: "tech-11", name: "Passagem Toreando", category: "pass", level: 1, mastered: false },
+                { id: "tech-12", name: "Stack Pass", category: "pass", level: 0, mastered: false }
+            ],
+            history: [
+                { date: "05 Mar 2024", title: "Faixa Azul - 3º Grau", details: "Conquistado após desempenho em campeonato estadual" },
+                { date: "10 Nov 2023", title: "Faixa Azul - 2º Grau", details: "Avaliação técnica semestral" },
+                { date: "07 Jun 2023", title: "Faixa Azul - 1º Grau", details: "Participação em seminário com mestre internacional" },
+                { date: "15 Jan 2023", title: "Faixa Azul", details: "Promoção anual da academia" },
+                { date: "05 Jan 2022", title: "Faixa Branca", details: "Início da jornada no Jiu-Jitsu" }
+            ]
+        };
+
+        // ======== Funções de Inicialização ========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa os dados do aluno na página
+            initStudentData();
+            
+            // Adiciona eventos para os checkboxes das técnicas
+            initTechniqueEvents();
+            
+            // Carrega dados do localStorage (se existirem)
+            loadSavedData();
+        });
+
+        // ======== Função para inicializar os dados do aluno na página ========
+        function initStudentData() {
+            // Define o nome do aluno no header e no perfil
+            document.getElementById('student-name').textContent = studentData.name;
+            document.getElementById('profile-name').textContent = studentData.name;
+        }
+
+        // ======== Função para inicializar eventos das técnicas ========
+        function initTechniqueEvents() {
+            // Adiciona eventos em todos os checkboxes de técnicas
+            const checkboxes = document.querySelectorAll('.technique-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // Atualiza o objeto de dados quando uma técnica é marcada/desmarcada
+                    const techniqueId = this.id;
+                    const technique = studentData.techniques.find(t => t.id === techniqueId);
+                    
+                    if (technique) {
+                        technique.mastered = this.checked;
+                        
+                        // Salva os dados atualizados no localStorage
+                        saveTechniqueData();
+                    }
+                });
+            });
+        }
+
+        // ======== Função para carregar dados salvos ========
+        function loadSavedData() {
+            // Verifica se há dados salvos no localStorage
+            const savedTechniques = localStorage.getItem('bjj_techniques');
+            
+            if (savedTechniques) {
+                // Carrega os dados salvos
+                const techniques = JSON.parse(savedTechniques);
+                
+                // Atualiza o estado dos checkboxes com os dados salvos
+                techniques.forEach(technique => {
+                    const checkbox = document.getElementById(technique.id);
+                    if (checkbox) {
+                        checkbox.checked = technique.mastered;
+                        
+                        // Atualiza o objeto de dados
+                        const techData = studentData.techniques.find(t => t.id === technique.id);
+                        if (techData) {
+                            techData.mastered = technique.mastered;
+                        }
+                    }
+                });
+            }
+        }
+
+        // ======== Função para salvar dados das técnicas ========
+        function saveTechniqueData() {
+            // Salva os dados das técnicas no localStorage
+            localStorage.setItem('bjj_techniques', JSON.stringify(studentData.techniques));
+            
+            // Feedback visual (opcional)
+            showSaveNotification();
+        }
+
+        // ======== Função para mostrar notificação de salvamento ========
+        function showSaveNotification() {
+            // Cria um elemento de notificação
+            const notification = document.createElement('div');
+            notification.textContent = 'Progresso salvo!';
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--color-blue);
+                color: white;
+                padding: 10px 20px;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 1000;
+            `;
+            
+            // Adiciona ao DOM
+            document.body.appendChild(notification);
+            
+            // Anima a notificação
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                
+                // Remove após alguns segundos
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 2000);
+            }, 10);
+        }
+    </script>
+</body>
+</html>
