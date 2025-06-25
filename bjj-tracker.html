@@ -170,6 +170,91 @@
             margin-left: 0.25rem;
         }
 
+        /* ======== HISTÓRICO DE LESÕES ======== */
+        .injury-history {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-gray);
+        }
+
+        .injury-history-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .injury-history-title i {
+            color: #e74c3c;
+        }
+
+        .injury-history-title h3 {
+            font-size: 1.1rem;
+            color: var(--color-blue-dark);
+        }
+
+        .injury-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .injury-item {
+            background: #fafafa;
+            border-left: 4px solid #e74c3c;
+            padding: 1rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .injury-item:hover {
+            background: #f5f5f5;
+        }
+
+        .injury-date {
+            font-size: 0.8rem;
+            color: var(--color-gray-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .injury-title {
+            font-weight: 600;
+            color: #c0392b;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        .injury-context {
+            font-size: 0.9rem;
+            color: var(--color-black);
+            margin-bottom: 0.25rem;
+        }
+
+        .injury-recovery {
+            font-size: 0.9rem;
+            color: var(--color-black);
+            margin-bottom: 0.5rem;
+        }
+
+        .injury-status {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .injury-status.recovered {
+            background: #27ae60;
+            color: white;
+        }
+
+        .injury-status.recovering {
+            background: #f39c12;
+            color: white;
+        }
+
         /* ======== EVOLUÇÃO NOS GOLPES ======== */
         .techniques-grid {
             display: grid;
@@ -346,6 +431,15 @@
                 text-align: center;
             }
 
+            .injury-history {
+                margin-top: 1.5rem;
+                padding-top: 1rem;
+            }
+
+            .injury-item {
+                padding: 0.8rem;
+            }
+
             .footer-content {
                 flex-direction: column;
                 text-align: center;
@@ -414,6 +508,37 @@
                     </div>
                     <p>Treinando desde: <strong>Janeiro 2022</strong></p>
                     <p>Academia: <strong>Team Jiu-Jitsu</strong></p>
+                </div>
+            </div>
+            
+            <!-- Histórico de Lesões -->
+            <div class="injury-history">
+                <div class="injury-history-title">
+                    <i class="fas fa-medical"></i>
+                    <h3>Histórico de Lesões</h3>
+                </div>
+                <div class="injury-timeline" id="injury-timeline">
+                    <div class="injury-item">
+                        <div class="injury-date">12 Fev 2024</div>
+                        <h4 class="injury-title">Lesão no ombro direito</h4>
+                        <p class="injury-context">Durante treino de takedowns</p>
+                        <p class="injury-recovery">Tempo parado: <strong>3 semanas</strong></p>
+                        <span class="injury-status recovered">Recuperado</span>
+                    </div>
+                    <div class="injury-item">
+                        <div class="injury-date">18 Set 2023</div>
+                        <h4 class="injury-title">Torção no joelho</h4>
+                        <p class="injury-context">Competição estadual</p>
+                        <p class="injury-recovery">Tempo parado: <strong>6 semanas</strong></p>
+                        <span class="injury-status recovered">Recuperado</span>
+                    </div>
+                    <div class="injury-item">
+                        <div class="injury-date">05 Abr 2023</div>
+                        <h4 class="injury-title">Distensão intercostal</h4>
+                        <p class="injury-context">Treino de guarda</p>
+                        <p class="injury-recovery">Tempo parado: <strong>2 semanas</strong></p>
+                        <span class="injury-status recovered">Recuperado</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -644,6 +769,11 @@
                 { date: "07 Jun 2023", title: "Faixa Azul - 1º Grau", details: "Participação em seminário com mestre internacional" },
                 { date: "15 Jan 2023", title: "Faixa Azul", details: "Promoção anual da academia" },
                 { date: "05 Jan 2022", title: "Faixa Branca", details: "Início da jornada no Jiu-Jitsu" }
+            ],
+            injuries: [
+                { date: "12 Fev 2024", injury: "Lesão no ombro direito", context: "Durante treino de takedowns", recoveryTime: "3 semanas", status: "recuperado" },
+                { date: "18 Set 2023", injury: "Torção no joelho", context: "Competição estadual", recoveryTime: "6 semanas", status: "recuperado" },
+                { date: "05 Abr 2023", injury: "Distensão intercostal", context: "Treino de guarda", recoveryTime: "2 semanas", status: "recuperado" }
             ]
         };
 
@@ -664,6 +794,43 @@
             // Define o nome do aluno no header e no perfil
             document.getElementById('student-name').textContent = studentData.name;
             document.getElementById('profile-name').textContent = studentData.name;
+            
+            // Inicializa o histórico de lesões
+            initInjuryHistory();
+        }
+
+        // ======== Função para inicializar o histórico de lesões ========
+        function initInjuryHistory() {
+            const injuryTimeline = document.getElementById('injury-timeline');
+            
+            if (injuryTimeline && studentData.injuries) {
+                // Limpa o conteúdo atual
+                injuryTimeline.innerHTML = '';
+                
+                // Adiciona cada lesão à timeline
+                studentData.injuries.forEach(injury => {
+                    const injuryElement = createInjuryElement(injury);
+                    injuryTimeline.appendChild(injuryElement);
+                });
+            }
+        }
+
+        // ======== Função para criar elemento de lesão ========
+        function createInjuryElement(injury) {
+            const injuryItem = document.createElement('div');
+            injuryItem.className = 'injury-item';
+            
+            const statusClass = injury.status === 'recuperado' ? 'recovered' : 'recovering';
+            
+            injuryItem.innerHTML = `
+                <div class="injury-date">${injury.date}</div>
+                <h4 class="injury-title">${injury.injury}</h4>
+                <p class="injury-context">${injury.context}</p>
+                <p class="injury-recovery">Tempo parado: <strong>${injury.recoveryTime}</strong></p>
+                <span class="injury-status ${statusClass}">${injury.status}</span>
+            `;
+            
+            return injuryItem;
         }
 
         // ======== Função para inicializar eventos das técnicas ========
