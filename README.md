@@ -54,11 +54,36 @@ Deploy tradicional para Azure:
 
 📖 **[Guia completo de setup Azure](DEPLOY.md)**
 
+#### Netlify 🌟
+
+Deploy moderno e fácil com CI/CD automático:
+
+```bash
+# Configuração simples via Netlify CLI
+npm install -g netlify-cli
+netlify init
+```
+
+**Secrets necessários:**
+- `NETLIFY_AUTH_TOKEN`: Token de acesso do Netlify
+- `NETLIFY_SITE_ID`: ID do site no Netlify
+
+**Recursos:**
+- ✅ Deploy automático na branch `main`
+- ✅ Deploy de preview em Pull Requests
+- ✅ CI/CD com validação automática
+- ✅ CDN global
+- ✅ HTTPS automático
+- ✅ Domínios personalizados
+- ✅ Formulários e funções serverless
+
+📖 **[Guia completo de setup Netlify](DEPLOY-NETLIFY.md)**
+
 ### Fluxo GitOps
 
 1. **Pull Request**: 
    - ✅ Validação automática (CI)
-   - 🔍 Deploy de preview (Vercel)
+   - 🔍 Deploy de preview (Vercel/Netlify)
    - 📊 Testes de qualidade
 
 2. **Merge na Main**:
@@ -80,10 +105,12 @@ bjj-copilot/
 ├── vercel.json                   # Configuração do Vercel
 ├── landingpage-prd.md            # Documento de requisitos do produto
 ├── DEPLOY-VERCEL.md              # Guia de deploy para Vercel
+├── DEPLOY-NETLIFY.md             # Guia de deploy para Netlify
 ├── DEPLOY.md                     # Guia de deploy para Azure
 ├── .github/
 │   └── workflows/
 │       ├── deploy-to-vercel.yml  # Workflow de deploy para Vercel (GitOps)
+│       ├── deploy-to-netlify.yml # Workflow de deploy para Netlify (GitOps)
 │       └── deploy-to-azure.yml   # Workflow de deploy para Azure
 └── README.md                     # Este arquivo
 ```
