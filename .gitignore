@@ -23,6 +23,3 @@ npm-debug.log*
 .env.development
 .env.test
 .env.production
-
-# Azure CLI cache
-.azure/cli/
