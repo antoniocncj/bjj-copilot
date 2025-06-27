@@ -14,58 +14,6 @@ Esta é uma landing page responsiva desenvolvida em HTML, CSS e JavaScript puro 
 - **Design Responsivo**: Funciona perfeitamente em desktop e mobile
 - **Persistência Local**: Dados salvos no localStorage do navegador
 
-## 🚀 Deploy com GitOps
-
-Este projeto está configurado para deploy automático usando GitHub Actions com GitOps e CI/CD.
-
-### Opções de Deploy
-
-#### Vercel (Recomendado) 🌟
-
-Deploy moderno com CI/CD automático e GitOps:
-
-```bash
-# Configuração simples via Vercel CLI
-npx vercel
-```
-
-**Secrets necessários:**
-- `VERCEL_TOKEN`: Token de acesso do Vercel
-- `VERCEL_ORG_ID`: ID da organização Vercel  
-- `VERCEL_PROJECT_ID`: ID do projeto
-
-**Recursos:**
-- ✅ Deploy automático na branch `main`
-- ✅ Deploy de preview em Pull Requests
-- ✅ CI/CD com validação automática
-- ✅ CDN global
-- ✅ HTTPS automático
-- ✅ Domínios personalizados
-
-📖 **[Guia completo de setup Vercel](DEPLOY-VERCEL.md)**
-
-#### Azure Blob Storage
-
-Deploy tradicional para Azure:
-
-**Secrets necessários:**
-- `AZURE_STORAGE_ACCOUNT_NAME`: Nome da conta de armazenamento
-- `AZURE_STORAGE_ACCOUNT_KEY`: Chave de acesso da conta
-
-📖 **[Guia completo de setup Azure](DEPLOY.md)**
-
-### Fluxo GitOps
-
-1. **Pull Request**: 
-   - ✅ Validação automática (CI)
-   - 🔍 Deploy de preview (Vercel)
-   - 📊 Testes de qualidade
-
-2. **Merge na Main**:
-   - ✅ Deploy automático de produção
-   - 🌐 Site atualizado instantaneamente
-   - 📈 Monitoramento automático
-
 ## 🛠️ Desenvolvimento Local
 
 Para testar localmente, simplesmente abra o arquivo `bjj-tracker.html` em um navegador web moderno.
@@ -77,14 +25,7 @@ bjj-copilot/
 ├── bjj-tracker.html              # Aplicação principal (HTML + CSS + JS)
 ├── index.html                    # Entry point (cópia do bjj-tracker.html)
 ├── error.html                    # Página de erro 404
-├── vercel.json                   # Configuração do Vercel
 ├── landingpage-prd.md            # Documento de requisitos do produto
-├── DEPLOY-VERCEL.md              # Guia de deploy para Vercel
-├── DEPLOY.md                     # Guia de deploy para Azure
-├── .github/
-│   └── workflows/
-│       ├── deploy-to-vercel.yml  # Workflow de deploy para Vercel (GitOps)
-│       └── deploy-to-azure.yml   # Workflow de deploy para Azure
 └── README.md                     # Este arquivo
 ```
 
