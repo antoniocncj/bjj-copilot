@@ -1,6 +1,7 @@
 # Build and deployment artifacts
 dist/
 build/
+.vercel
 
 # Temporary files
 *.tmp
