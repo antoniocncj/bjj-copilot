@@ -30,6 +30,7 @@ O BJJ Copilot é uma plataforma que combina tecnologia moderna com a tradição 
 - [Personas e Papéis](./docs/personas.md)
 - [Regras de Graduação](./docs/business-rules.md)
 - [Especificações de Funcionalidades](./docs/features.md)
+- [Requisitos Técnicos](./docs/technical-requirements.md)
 
 ## 🚀 Status do Projeto
 
