@@ -1,0 +1,49 @@
+# Development-only services for local development
+# Run with: docker compose -f docker-compose.dev.yml up
+# This allows running the backend locally while using containerized database and cache
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: bjj-copilot-postgres-dev
+    environment:
+      POSTGRES_DB: bjj_copilot
+      POSTGRES_USER: bjj_user
+      POSTGRES_PASSWORD: bjj_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d/
+    networks:
+      - bjj-copilot-dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bjj_user -d bjj_copilot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: bjj-copilot-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - bjj-copilot-dev-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+networks:
+  bjj-copilot-dev-network:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:

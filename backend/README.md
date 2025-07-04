@@ -6,12 +6,40 @@ Spring Boot-based backend API for the BJJ Copilot system.
 
 - Java 17+
 - Maven 3.8+
-- PostgreSQL 15+ (for production)
-- Redis 7+ (for production)
+- Docker and Docker Compose (for containerized development)
+- PostgreSQL 15+ (for local development without Docker)
+- Redis 7+ (for local development without Docker)
 
 ## Setup
 
-### Development Environment
+### Docker Development Environment (Recommended)
+
+The easiest way to run the application locally, especially on Windows machines:
+
+#### Option 1: Full Stack with Docker
+
+```bash
+# Build and start all services (backend + database + cache)
+docker-compose up --build
+
+# The API will be available at http://localhost:8080
+# PostgreSQL will be available at localhost:5432
+# Redis will be available at localhost:6379
+```
+
+#### Option 2: Database/Cache Only (for local backend development)
+
+```bash
+# Start only PostgreSQL and Redis containers
+docker-compose -f docker-compose.dev.yml up
+
+# In another terminal, run the backend locally
+mvn spring-boot:run -Dspring.profiles.active=default
+
+# The API will be available at http://localhost:8080
+```
+
+### Traditional Development Environment
 
 ```bash
 # Compile the application
@@ -20,8 +48,8 @@ mvn clean compile
 # Run tests
 mvn test
 
-# Start the application (development mode)
-mvn spring-boot:run
+# Start the application (development mode with H2 database)
+mvn spring-boot:run -Dspring.profiles.active=dev
 
 # The API will be available at http://localhost:8080
 ```
@@ -44,6 +72,38 @@ JWT_SECRET=your-jwt-secret-key
 - `mvn spring-boot:run` - Start the application in development mode
 - `mvn clean package` - Build the JAR file
 - `mvn clean install` - Install to local Maven repository
+
+## Docker Commands
+
+### Full Development Stack
+```bash
+# Build and start all services
+docker-compose up --build
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (clean slate)
+docker-compose down -v
+```
+
+### Development Database Only
+```bash
+# Start PostgreSQL and Redis for local development
+docker-compose -f docker-compose.dev.yml up
+
+# Stop development services
+docker-compose -f docker-compose.dev.yml down
+```
+
+### Individual Container Management
+```bash
+# Build only the backend image
+docker build -t bjj-copilot-backend .
+
+# Run the backend container (requires external database)
+docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=docker bjj-copilot-backend
+```
 
 ## Architecture
 
