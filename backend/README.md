@@ -75,28 +75,74 @@ JWT_SECRET=your-jwt-secret-key
 
 ## Docker Commands
 
-### Full Development Stack
+### Quick Setup (Recommended)
+
+**For Linux/macOS:**
 ```bash
-# Build and start all services
-docker-compose up --build
+# Start development databases only
+./dev-setup.sh dev
+
+# Start full stack
+./dev-setup.sh full
 
 # Stop all services
-docker-compose down
+./dev-setup.sh stop
+
+# Show service status
+./dev-setup.sh status
+
+# View logs
+./dev-setup.sh logs
+
+# Clean up everything
+./dev-setup.sh clean
+```
+
+**For Windows:**
+```cmd
+# Start development databases only
+dev-setup.bat dev
+
+# Start full stack
+dev-setup.bat full
+
+# Stop all services
+dev-setup.bat stop
+
+# Show service status
+dev-setup.bat status
+
+# View logs
+dev-setup.bat logs
+
+# Clean up everything
+dev-setup.bat clean
+```
+
+### Manual Docker Commands
+
+#### Full Development Stack
+```bash
+# Build and start all services
+docker compose up --build
+
+# Stop all services
+docker compose down
 
 # Stop and remove volumes (clean slate)
-docker-compose down -v
+docker compose down -v
 ```
 
-### Development Database Only
+#### Development Database Only
 ```bash
 # Start PostgreSQL and Redis for local development
-docker-compose -f docker-compose.dev.yml up
+docker compose -f docker-compose.dev.yml up
 
 # Stop development services
-docker-compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yml down
 ```
 
-### Individual Container Management
+#### Individual Container Management
 ```bash
 # Build only the backend image
 docker build -t bjj-copilot-backend .
