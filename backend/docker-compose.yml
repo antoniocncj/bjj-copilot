@@ -1,0 +1,72 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: bjj-copilot-postgres
+    environment:
+      POSTGRES_DB: bjj_copilot
+      POSTGRES_USER: bjj_user
+      POSTGRES_PASSWORD: bjj_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d/
+    networks:
+      - bjj-copilot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bjj_user -d bjj_copilot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: bjj-copilot-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - bjj-copilot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # BJJ Copilot Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bjj-copilot-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_USERNAME: bjj_user
+      DB_PASSWORD: bjj_password
+      JWT_SECRET: bjj-copilot-dev-jwt-secret-key
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - bjj-copilot-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  bjj-copilot-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
