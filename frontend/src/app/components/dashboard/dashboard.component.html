@@ -1,0 +1,104 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <mat-toolbar color="primary" class="dashboard-header">
+    <span>BJJ Copilot</span>
+    <span class="spacer"></span>
+    <span>Olá, {{ currentUser?.name }}</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Sair</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <div class="dashboard-content">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h1>Dashboard {{ isInstructor() ? 'do Instrutor' : 'do Aluno' }}</h1>
+      <p *ngIf="!isInstructor()">Faixa atual: <strong>{{ getCurrentBeltDisplay() }}</strong></p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="stat-details">
+            <h3>{{ stats.totalStudents }}</h3>
+            <p>Total de Alunos</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>military_tech</mat-icon>
+          </div>
+          <div class="stat-details">
+            <h3>{{ stats.recentGraduations }}</h3>
+            <p>Graduações Totais</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card" *ngIf="!isInstructor()">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>star</mat-icon>
+          </div>
+          <div class="stat-details">
+            <h3>{{ stats.myGraduations }}</h3>
+            <p>Minhas Graduações</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Navigation Cards -->
+    <div class="nav-grid">
+      <mat-card class="nav-card" routerLink="/graduation-history">
+        <mat-card-content>
+          <mat-icon>history</mat-icon>
+          <h3>Histórico de Graduações</h3>
+          <p>{{ isInstructor() ? 'Visualizar todas as graduações' : 'Veja seu progresso' }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="nav-card" routerLink="/ai-chat">
+        <mat-card-content>
+          <mat-icon>chat</mat-icon>
+          <h3>Chat com IA</h3>
+          <p>Tire dúvidas sobre técnicas de BJJ</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Recent Graduations -->
+    <mat-card class="recent-graduations">
+      <mat-card-header>
+        <mat-card-title>Graduações Recentes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="recentGraduations.length === 0" class="no-data">
+          Nenhuma graduação encontrada
+        </div>
+        <div *ngFor="let graduation of recentGraduations" class="graduation-item">
+          <div class="graduation-info">
+            <strong>{{ graduation.userName }}</strong>
+            <span>graduou para {{ graduation.toBelt.displayName }}</span>
+          </div>
+          <div class="graduation-date">
+            {{ graduation.graduationDate | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

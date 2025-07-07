@@ -1,0 +1,90 @@
+<div class="graduation-history-container">
+  <!-- Header -->
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>Histórico de Graduações</span>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          {{ isInstructor() ? 'Todas as Graduações' : 'Suas Graduações' }}
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="!isInstructor()">
+          Acompanhe sua evolução no Brazilian Jiu-Jitsu
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="isLoading" class="loading-container">
+          <mat-spinner></mat-spinner>
+          <p>Carregando graduações...</p>
+        </div>
+
+        <div *ngIf="!isLoading && graduations.length === 0" class="no-data">
+          <mat-icon>military_tech</mat-icon>
+          <h3>{{ isInstructor() ? 'Nenhuma graduação encontrada' : 'Você ainda não possui graduações' }}</h3>
+          <p>{{ isInstructor() ? 'Graduações aparecerão aqui quando forem criadas.' : 'Suas graduações futuras aparecerão aqui.' }}</p>
+        </div>
+
+        <div *ngIf="!isLoading && graduations.length > 0" class="table-container">
+          <table mat-table [dataSource]="graduations" class="graduations-table">
+            <!-- Student Name Column (only for instructors) -->
+            <ng-container matColumnDef="userName" *ngIf="isInstructor()">
+              <th mat-header-cell *matHeaderCellDef>Aluno</th>
+              <td mat-cell *matCellDef="let graduation">{{ graduation.userName }}</td>
+            </ng-container>
+
+            <!-- From Belt Column -->
+            <ng-container matColumnDef="fromBelt">
+              <th mat-header-cell *matHeaderCellDef>Faixa Anterior</th>
+              <td mat-cell *matCellDef="let graduation">
+                <div class="belt-info">
+                  <div 
+                    class="belt-color" 
+                    [style.background-color]="getBeltColor(graduation.fromBelt)">
+                  </div>
+                  <span>{{ graduation.fromBelt.displayName }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- To Belt Column -->
+            <ng-container matColumnDef="toBelt">
+              <th mat-header-cell *matHeaderCellDef>Nova Faixa</th>
+              <td mat-cell *matCellDef="let graduation">
+                <div class="belt-info">
+                  <div 
+                    class="belt-color" 
+                    [style.background-color]="getBeltColor(graduation.toBelt)">
+                  </div>
+                  <span>{{ graduation.toBelt.displayName }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Graduation Date Column -->
+            <ng-container matColumnDef="graduationDate">
+              <th mat-header-cell *matHeaderCellDef>Data</th>
+              <td mat-cell *matCellDef="let graduation">
+                {{ graduation.graduationDate | date:'dd/MM/yyyy' }}
+              </td>
+            </ng-container>
+
+            <!-- Instructor Name Column -->
+            <ng-container matColumnDef="instructorName">
+              <th mat-header-cell *matHeaderCellDef>Instrutor</th>
+              <td mat-cell *matCellDef="let graduation">{{ graduation.instructorName }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
