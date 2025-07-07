@@ -1,0 +1,170 @@
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.dashboard-content {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.welcome-section {
+  margin-bottom: 32px;
+}
+
+.welcome-section h1 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.welcome-section p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  cursor: default;
+}
+
+.stat-card mat-card-content {
+  display: flex;
+  align-items: center;
+  padding: 16px !important;
+}
+
+.stat-icon {
+  margin-right: 16px;
+}
+
+.stat-icon mat-icon {
+  font-size: 36px;
+  height: 36px;
+  width: 36px;
+  color: #3f51b5;
+}
+
+.stat-details h3 {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-details p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.nav-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-card mat-card-content {
+  text-align: center;
+  padding: 32px 16px !important;
+}
+
+.nav-card mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  color: #3f51b5;
+  margin-bottom: 16px;
+}
+
+.nav-card h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.nav-card p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.recent-graduations {
+  margin-bottom: 32px;
+}
+
+.graduation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.graduation-item:last-child {
+  border-bottom: none;
+}
+
+.graduation-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.graduation-info span {
+  color: #666;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.graduation-date {
+  color: #999;
+  font-size: 12px;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 32px;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 16px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-grid {
+    grid-template-columns: 1fr;
+  }
+}
